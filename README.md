@@ -164,3 +164,27 @@ Esta é a mesma estrutura de um bom *issue* e de um bom *postmortem*.
 Permitido e incentivado. Em contrapartida, você deve ser capaz de explicar
 qualquer linha entregue: a arguição final pergunta o *porquê* das decisões, não
 a sintaxe.
+
+
+---
+
+## Trabalho prático — pipeline DevSecOps
+
+Autor: Felipe Geraldo de Oliveira (202310174)
+
+O workflow `.github/workflows/devsecops.yml` roda em pull request e em push nas branches `main` e `trabalho-pratico`. A publicação da imagem no GHCR só existe no job `publicar`, que depende de todos os checks e só dispara em push na `main`. Pull request não publica. A branch `trabalho-pratico` exige esses checks para merge.
+
+| Ferramenta | O que verifica | Quando bloqueia |
+| --- | --- | --- |
+| pytest | testes da API, sem banco externo | qualquer teste falho |
+| Gitleaks | histórico do Git em busca de segredo | qualquer vazamento encontrado |
+| SonarCloud | SAST e Quality Gate do código novo | gate reprovado (`sonar.qualitygate.wait=true`) |
+| Trivy (dependências) | `requirements*.txt` | HIGH ou CRITICAL com correção disponível |
+| Trivy (imagem) | imagem Docker (biblioteca e SO) | HIGH ou CRITICAL com correção disponível |
+| Syft | SBOM SPDX da imagem | não bloqueia; o arquivo sobe como artifact `sbom` |
+
+LOW e MEDIUM do Trivy vão para o artifact `trivy-relatorio` e não falham o job. `ignore-unfixed` deixa de fora vulnerabilidade sem correção publicada.
+
+A demonstração do bloqueio está na branch `demo-cve`: o `requirements.txt` ganha `PyJWT==1.7.1` (CVE-2022-29217 e CVE-2026-102268, correção em 2.14.0). O pull request contra `trabalho-pratico` fica vermelho no Trivy e o merge não passa na proteção da branch. O commit seguinte sobe para `PyJWT==2.14.0`. Essa versão vulnerável não vai para a `main` e o job `publicar` não roda nela.
+
+Token do SonarCloud: secret `SONAR_TOKEN`. Quality Gate é o do projeto no SonarCloud, aplicado ao código novo.
