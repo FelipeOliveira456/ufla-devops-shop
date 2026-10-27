@@ -78,7 +78,6 @@ jobs:
           scan-type: fs
           scan-ref: .
           scanners: vuln
-          version: v0.58.1
           severity: CRITICAL,HIGH
           ignore-unfixed: true
           exit-code: "1"
@@ -99,7 +98,6 @@ jobs:
           scan-type: fs
           scan-ref: .
           scanners: vuln
-          version: v0.58.1
           severity: LOW,MEDIUM
           exit-code: "0"
           format: table
@@ -118,7 +116,6 @@ jobs:
           scan-type: image
           image-ref: ufla-shop:ci
           scanners: vuln
-          version: v0.58.1
           severity: CRITICAL,HIGH
           ignore-unfixed: true
           vuln-type: os,library
@@ -140,7 +137,6 @@ jobs:
           scan-type: image
           image-ref: ufla-shop:ci
           scanners: vuln
-          version: v0.58.1
           severity: LOW,MEDIUM
           vuln-type: os,library
           exit-code: "0"
