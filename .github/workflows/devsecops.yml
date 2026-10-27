@@ -73,7 +73,7 @@ jobs:
 
       - name: Dependencias HIGH e CRITICAL
         id: deps
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -94,7 +94,7 @@ jobs:
 
       - name: Relatorio LOW e MEDIUM das dependencias
         if: steps.deps.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -113,7 +113,7 @@ jobs:
       - name: Imagem HIGH e CRITICAL
         id: imagem
         if: steps.build.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ufla-shop:ci
@@ -135,7 +135,7 @@ jobs:
 
       - name: Relatorio da imagem sem bloquear LOW e MEDIUM
         if: steps.deps.outcome == 'success' && steps.imagem.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ufla-shop:ci
